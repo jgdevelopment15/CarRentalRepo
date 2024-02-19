@@ -1,3 +1,4 @@
+using CarRental.API.Extensions;
 using CarRental.Business.Implementations;
 using CarRental.Business.Interfaces;
 using CarRental.Data;
@@ -14,8 +15,7 @@ builder.Services.AddDbContext<CarrentalContext>(options => options.UseMySQL(buil
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddTransient<IVehicleRepository, VehicleRepository>();
-builder.Services.AddTransient<IVehicleBusiness, VehicleBusiness>();
+builder.Services.AddServices();
 
 var app = builder.Build();
 
