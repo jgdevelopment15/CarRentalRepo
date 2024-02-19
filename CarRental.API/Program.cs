@@ -1,9 +1,7 @@
+using AutoMapper;
 using CarRental.API.Extensions;
-using CarRental.Business.Implementations;
-using CarRental.Business.Interfaces;
+using CarRental.Common.Mapper;
 using CarRental.Data;
-using CarRental.Data.Implementations;
-using CarRental.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +12,14 @@ builder.Services.AddDbContext<CarrentalContext>(options => options.UseMySQL(buil
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var mapperConfig = new MapperConfiguration(m =>
+{
+    m.AddProfile(new AutoMapperProfile());
+});
+
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 
 builder.Services.AddServices();
 

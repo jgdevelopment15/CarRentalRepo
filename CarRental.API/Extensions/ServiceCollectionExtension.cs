@@ -2,7 +2,6 @@
 using CarRental.Business.Interfaces;
 using CarRental.Data.Implementations;
 using CarRental.Data.Interfaces;
-using System.Runtime.CompilerServices;
 
 namespace CarRental.API.Extensions
 {

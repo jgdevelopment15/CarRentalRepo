@@ -1,45 +1,32 @@
-﻿using CarRental.Business.Interfaces;
+﻿using AutoMapper;
+using CarRental.Business.Interfaces;
 using CarRental.Common.DTOs;
 using CarRental.Data;
-using CarRental.Data.Implementations;
 using CarRental.Data.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarRental.Business.Implementations
 {
     public class VehicleBusiness : IVehicleBusiness
     {
-        private readonly IVehicleRepository vehicleRepository;
+        private readonly IVehicleRepository _vehicleRepository;
+        private readonly IMapper _mapper;
 
-        public VehicleBusiness(IVehicleRepository vehicleRepository)
+        public VehicleBusiness(IVehicleRepository vehicleRepository, IMapper mapper)
         {
-            this.vehicleRepository = vehicleRepository;
+            _vehicleRepository = vehicleRepository;
+            _mapper = mapper;
         }
 
-        public IEnumerable<VehicleDto> GetVehiclesByLocation(int id)
+        public async Task<IEnumerable<VehicleDto>> GetVehiclesByLocation(int id)
         {
-            IQueryable<Vehicle> vehicles = vehicleRepository.GetVehiclesByLocation(id);
+            IQueryable<Vehicle> vehicles = _vehicleRepository.GetVehiclesByLocation(id);                        
 
             List<VehicleDto> vehiclesDto = new();
 
-            foreach (var vehicle in vehicles)
-            {
-                var vehicleDto = new VehicleDto()
-                {
-                    Id = vehicle.Id,
-                    VehicleType = vehicle.VehicleType.Name,
-                    Make = vehicle.Make,
-                    Model = vehicle.Model,
-                    Year = vehicle.Year,
-                    Color = vehicle.Color,
-                    PricePerDay = vehicle.PricePerDay,
-                    Location = string.Concat(vehicle.Location.Name, ", ", vehicle.Location.City, ", ", vehicle.Location.State, ", ", vehicle.Location.Country)
-                };
-
+            foreach (var vehicle in await vehicles.ToListAsync())
+            {                                  
+                var vehicleDto = _mapper.Map<VehicleDto>(vehicle);
                 vehiclesDto.Add(vehicleDto);
             }
 

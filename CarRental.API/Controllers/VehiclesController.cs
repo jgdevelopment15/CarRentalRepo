@@ -1,5 +1,4 @@
 ﻿using CarRental.Business.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRental.API.Controllers
@@ -18,7 +17,7 @@ namespace CarRental.API.Controllers
         [HttpGet("ByLocation/{id}")]
         public async Task<IActionResult> GetVehiclesByLocation(int id)
         {
-           var result = _vehicleBusiness.GetVehiclesByLocation(id);
+            var result = await _vehicleBusiness.GetVehiclesByLocation(id);
 
             return Ok(result);
         }
